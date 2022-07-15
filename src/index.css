@@ -1,0 +1,18 @@
+@import 'bootstrap/dist/css/bootstrap-reboot.css';
+@import 'bootstrap/dist/css/bootstrap.css';
+
+:root {
+  --havbar-height: 56px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+.wrapper {
+  height: calc(100% - var(--havbar-height) - 20);
+  overflow-y: auto;
+}
