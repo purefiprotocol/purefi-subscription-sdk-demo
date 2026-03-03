@@ -96,7 +96,8 @@ interface VerificationProcessFormFields {
   signatureType?: string;
 }
 
-const ISSUER_API_URL = import.meta.env.VITE_ISSUER_API_URL_STAGE;
+const ISSUER_API_URL_PROD = import.meta.env.VITE_ISSUER_API_URL_PROD;
+const ISSUER_API_URL_STAGE = import.meta.env.VITE_ISSUER_API_URL_STAGE;
 const PUREFI_DEMO_CONTRACT = import.meta.env.VITE_PUREFI_DEMO_CONTRACT;
 
 const PACKAGE_TYPE_OPTIONS = [
@@ -319,11 +320,11 @@ const Playground: FC = () => {
   }, [account.chainId]);
 
   const [presetType, setPresetType] = useState<PresetTypeEnum>(
-    PresetTypeEnum.CUSTOM
+    PresetTypeEnum.CUSTOM,
   );
 
   const [implementation, setImplementation] = useState<ImplementationEnum>(
-    ImplementationEnum.FRONTEND
+    ImplementationEnum.FRONTEND,
   );
 
   const isWalletConnected = account.isConnected;
@@ -350,7 +351,7 @@ const Playground: FC = () => {
     useState<PureFIRuleV5Payload | null>(null);
 
   const [ruleV5DataResult, setRuleV5DataResult] = useState<RuleV5Data | null>(
-    null
+    null,
   );
 
   const [purefiPackage, setPurefiPackage] = useState<string | null>(null);
@@ -438,7 +439,7 @@ const Playground: FC = () => {
       signatureProcessForm.setFields([
         {
           name: 'customSignerUrl',
-          value: 'http://localhost:4000/sign',
+          value: 'http://localhost:5000/sign',
         },
       ]);
       setRuleV5DataResult(null);
@@ -488,7 +489,7 @@ const Playground: FC = () => {
   const toAddressValue = Form.useWatch('toAddress', payloadForm);
   const intermediaryAddressValue = Form.useWatch(
     'intermediaryAddress',
-    payloadForm
+    payloadForm,
   );
   const payeeAddressValue = Form.useWatch('payeeAddress', payloadForm);
   const token0AddressValue = Form.useWatch('token0Address', payloadForm);
@@ -499,15 +500,15 @@ const Playground: FC = () => {
   const token1DecimalsValue = Form.useWatch('token1Decimals', payloadForm);
   const tokenPaymentAddressValue = Form.useWatch(
     'tokenPaymentAddress',
-    payloadForm
+    payloadForm,
   );
   const tokenPaymentValueValue = Form.useWatch(
     'tokenPaymentValue',
-    payloadForm
+    payloadForm,
   );
   const tokenPaymentDecimalsValue = Form.useWatch(
     'tokenPaymentDecimals',
-    payloadForm
+    payloadForm,
   );
 
   const packageTypeErrors = payloadForm.getFieldError('packageType');
@@ -515,7 +516,7 @@ const Playground: FC = () => {
   const fromAddressErrors = payloadForm.getFieldError('fromAddress');
   const toAddressErrors = payloadForm.getFieldError('toAddress');
   const intermediaryAddressErrors = payloadForm.getFieldError(
-    'intermediaryAddress'
+    'intermediaryAddress',
   );
   const payeeAddressErrors = payloadForm.getFieldError('payeeAddress');
   const token0AddressErrors = payloadForm.getFieldError('token0Address');
@@ -525,12 +526,12 @@ const Playground: FC = () => {
   const token1ValueErrors = payloadForm.getFieldError('token1Value');
   const token1DecimalsErrors = payloadForm.getFieldError('token1Decimals');
   const tokenPaymentAddressErrors = payloadForm.getFieldError(
-    'tokenPaymentAddress'
+    'tokenPaymentAddress',
   );
   const tokenPaymentValueErrors =
     payloadForm.getFieldError('tokenPaymentValue');
   const tokenPaymentDecimalsErrors = payloadForm.getFieldError(
-    'tokenPaymentDecimals'
+    'tokenPaymentDecimals',
   );
 
   const payloadFormChangeHandler = (fields: PayloadFields) => {
@@ -542,20 +543,20 @@ const Playground: FC = () => {
 
   const accountAddressValue = Form.useWatch(
     'accountAddress',
-    signatureProcessForm
+    signatureProcessForm,
   );
   const chainIdValue = Form.useWatch('chainId', signatureProcessForm);
 
   const customSignerUrlValue = Form.useWatch(
     'customSignerUrl',
-    signatureProcessForm
+    signatureProcessForm,
   );
 
   const accountAddressErrors = payloadForm.getFieldError('accountAddress');
   const chainIdErrors = payloadForm.getFieldError('chainId');
 
   const signatureProcessFormChangeHandler = (
-    fields: SignatureProcessFields
+    fields: SignatureProcessFields,
   ) => {
     // console.log('signatureProcessForm', fields);
   };
@@ -565,11 +566,11 @@ const Playground: FC = () => {
   const issuerUrlValue = Form.useWatch('issuerUrl', verificationProcessForm);
   const signatureTypeValue = Form.useWatch(
     'signatureType',
-    verificationProcessForm
+    verificationProcessForm,
   );
 
   const verificationProcessFormChangeHandler = (
-    fields: VerificationProcessFormFields
+    fields: VerificationProcessFormFields,
   ) => {
     // console.log('verificationProcessForm', fields);
 
@@ -621,7 +622,7 @@ const Playground: FC = () => {
       await signatureProcessForm.validateFields({ recursive: true });
 
       const isAccountReady = [accountAddressErrors, chainIdErrors].every(
-        (item) => item.length === 0
+        (item) => item.length === 0,
       );
 
       return isAccountReady;
@@ -743,7 +744,7 @@ const Playground: FC = () => {
 
         const data = await PureFI.verifyRuleV5(
           purefiPayload,
-          signatureTypeValue
+          signatureTypeValue,
         );
 
         setPurefiPackage(data);
@@ -753,7 +754,7 @@ const Playground: FC = () => {
         const customizedError = theError.message.endsWith('undefined')
           ? theError.message.slice(
               0,
-              theError.message.length - 'undefined'.length
+              theError.message.length - 'undefined'.length,
             )
           : theError.message;
 
@@ -767,7 +768,7 @@ const Playground: FC = () => {
       }
     } else {
       toast.warn(
-        'Prepare PureFi Message and corresponding EIP-712 Signature on the previous step'
+        'Prepare PureFi Message and corresponding EIP-712 Signature on the previous step',
       );
     }
   };
@@ -775,10 +776,10 @@ const Playground: FC = () => {
   const isPayloadReadonly = presetType !== PresetTypeEnum.CUSTOM;
 
   const isIntermediaryHidden = ['0', '32', '48', '64', '96', '112'].includes(
-    packageTypeValue
+    packageTypeValue,
   );
   const isPayeeHidden = ['0', '32', '48', '128', '160', '176'].includes(
-    packageTypeValue
+    packageTypeValue,
   );
   const isToken0Hidden = ['0', '64', '128', '192'].includes(packageTypeValue);
   const isToken1Hidden = [
@@ -792,7 +793,7 @@ const Playground: FC = () => {
     '224',
   ].includes(packageTypeValue);
   const isTokenPaymentHidden = ['0', '32', '48', '128', '160', '176'].includes(
-    packageTypeValue
+    packageTypeValue,
   );
 
   const isCustomSignerUrlHidden = isFrontendImplementation;
@@ -857,7 +858,7 @@ const Playground: FC = () => {
           tokenPaymentDecimalsErrors.length === 0
             ? parseUnits(
                 tokenPaymentValueValue,
-                tokenPaymentDecimalsValue
+                tokenPaymentDecimalsValue,
               ).toString()
             : '',
         decimals:
@@ -1044,15 +1045,15 @@ const Playground: FC = () => {
                         validator: (rule, value) => {
                           if (value === '') {
                             return Promise.reject(
-                              new Error('Please enter Rule Id')
+                              new Error('Please enter Rule Id'),
                             );
                           }
 
                           if (+value <= 0) {
                             return Promise.reject(
                               new Error(
-                                'Rule Id must be positive numeric string'
-                              )
+                                'Rule Id must be positive numeric string',
+                              ),
                             );
                           }
 
@@ -1235,15 +1236,15 @@ const Playground: FC = () => {
 
                               if (value === '') {
                                 return Promise.reject(
-                                  new Error('Please enter Value')
+                                  new Error('Please enter Value'),
                                 );
                               }
 
                               if (+value <= 0) {
                                 return Promise.reject(
                                   new Error(
-                                    'Value must be positive. Min value is 0.001'
-                                  )
+                                    'Value must be positive. Min value is 0.001',
+                                  ),
                                 );
                               }
 
@@ -1323,15 +1324,15 @@ const Playground: FC = () => {
 
                               if (value === '') {
                                 return Promise.reject(
-                                  new Error('Please enter Value')
+                                  new Error('Please enter Value'),
                                 );
                               }
 
                               if (+value <= 0) {
                                 return Promise.reject(
                                   new Error(
-                                    'Value must be positive. Min value is 0.001'
-                                  )
+                                    'Value must be positive. Min value is 0.001',
+                                  ),
                                 );
                               }
 
@@ -1431,15 +1432,15 @@ const Playground: FC = () => {
 
                               if (value === '') {
                                 return Promise.reject(
-                                  new Error('Please enter Value')
+                                  new Error('Please enter Value'),
                                 );
                               }
 
                               if (+value <= 0) {
                                 return Promise.reject(
                                   new Error(
-                                    'Value must be positive. Min value is 0.001'
-                                  )
+                                    'Value must be positive. Min value is 0.001',
+                                  ),
                                 );
                               }
 
@@ -1573,13 +1574,13 @@ const Playground: FC = () => {
                         validator: (rule, value) => {
                           if (value === '') {
                             return Promise.reject(
-                              new Error('Please enter Chain Id')
+                              new Error('Please enter Chain Id'),
                             );
                           }
 
                           if (+value <= 0) {
                             return Promise.reject(
-                              new Error('Chain Id Invalid')
+                              new Error('Chain Id Invalid'),
                             );
                           }
 
@@ -1638,7 +1639,7 @@ const Playground: FC = () => {
                             payload: ruleV5Payload,
                           },
                           null,
-                          4
+                          4,
                         )}
                       </pre>
 
@@ -1651,7 +1652,7 @@ const Playground: FC = () => {
                               payload: ruleV5Payload,
                             },
                             null,
-                            4
+                            4,
                           ),
                         }}
                       />
@@ -1708,23 +1709,23 @@ const Playground: FC = () => {
                         {isFrontendImplementation
                           ? JSON.stringify(ruleV5Data, null, 4)
                           : ruleV5DataResult
-                          ? JSON.stringify(ruleV5DataResult, null, 4)
-                          : ''}
+                            ? JSON.stringify(ruleV5DataResult, null, 4)
+                            : ''}
                       </pre>
 
                       {!!(isFrontendImplementation
                         ? JSON.stringify(ruleV5Data, null, 4)
                         : ruleV5DataResult
-                        ? JSON.stringify(ruleV5DataResult, null, 4)
-                        : '') ? (
+                          ? JSON.stringify(ruleV5DataResult, null, 4)
+                          : '') ? (
                         <Typography.Text
                           className={styles.playground__copy}
                           copyable={{
                             text: isFrontendImplementation
                               ? JSON.stringify(ruleV5Data, null, 4)
                               : ruleV5DataResult
-                              ? JSON.stringify(ruleV5DataResult, null, 4)
-                              : '',
+                                ? JSON.stringify(ruleV5DataResult, null, 4)
+                                : '',
                           }}
                         />
                       ) : null}
@@ -1772,7 +1773,7 @@ const Playground: FC = () => {
                   form={verificationProcessForm}
                   initialValues={{
                     signatureType: SignatureType.ECDSA,
-                    issuerUrl: ISSUER_API_URL,
+                    issuerUrl: ISSUER_API_URL_STAGE,
                   }}
                   onValuesChange={verificationProcessFormChangeHandler}
                   autoComplete="off"
@@ -1809,9 +1810,14 @@ const Playground: FC = () => {
                       optionType="button"
                       options={[
                         {
-                          value: ISSUER_API_URL,
+                          value: ISSUER_API_URL_STAGE,
                           label: 'STAGE',
-                          title: `${ISSUER_API_URL}/v5/rule`,
+                          title: `${ISSUER_API_URL_STAGE}/v5/rule`,
+                        },
+                        {
+                          value: ISSUER_API_URL_PROD,
+                          label: 'PROD',
+                          title: `${ISSUER_API_URL_PROD}/v5/rule`,
                         },
                       ]}
                       block
@@ -1845,7 +1851,7 @@ const Playground: FC = () => {
                                 signType: signatureTypeValue,
                               },
                               null,
-                              4
+                              4,
                             )
                           : ''}
                       </pre>
@@ -1857,7 +1863,7 @@ const Playground: FC = () => {
                               signType: signatureTypeValue,
                             },
                             null,
-                            4
+                            4,
                           )
                         : '') ? (
                         <Typography.Text
@@ -1870,7 +1876,7 @@ const Playground: FC = () => {
                                     signType: signatureTypeValue,
                                   },
                                   null,
-                                  4
+                                  4,
                                 )
                               : '',
                           }}
